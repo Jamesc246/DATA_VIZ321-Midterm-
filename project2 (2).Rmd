@@ -30,6 +30,18 @@ uber_clean <- uber_data %>%
   mutate(
     Date = ymd(Date),
     Time = hms(Time),
+
+    Avg.VTAT = na_if(Avg.VTAT, "NA"),
+    Avg.CTAT = na_if(Avg.CTAT, "NA"),
+    Cancelled.Rides.by.Customer = na_if(Cancelled.Rides.by.Customer, "NA"),
+    Incomplete.Rides = na_if(Incomplete.Rides, "NA"),
+    Booking.Value = na_if(Booking.Value, "NA"),
+    Ride.Distance = na_if(Ride.Distance, "NA"),
+    Driver.Ratings = na_if(Driver.Ratings, "NA"),
+    Customer.Rating = na_if(Customer.Rating, "NA"),
+
+
+
     Avg.VTAT = as.numeric(Avg.VTAT),
     Avg.CTAT = as.numeric(Avg.CTAT),
     Cancelled.Rides.by.Customer = as.numeric(Cancelled.Rides.by.Customer),
