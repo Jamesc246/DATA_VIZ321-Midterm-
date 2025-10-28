@@ -66,6 +66,15 @@ uber_clean <- uber_clean %>%
 cor(uber_clean$Driver.Ratings, uber_clean$Avg.VTAT, use = "complete.obs")
 ```
 
+
+
+
+
+
+
+
+
+
 ```{r}
 set.seed(123)  # for reproducibility
 uber_sample <- uber_clean %>% sample_n(1000)  # take 5,000 random rows
