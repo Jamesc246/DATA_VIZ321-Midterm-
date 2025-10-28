@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
 library(lubridate)
-uber_data <- read.csv("/Users/jamescoyle/Desktop/PROJECT 2/Project 2-ISTA 320/archive (4)/ncr_ride_bookings.csv")
+uber_data <- read.csv(" ")
 
 head(uber_data)
 summary(uber_data)
