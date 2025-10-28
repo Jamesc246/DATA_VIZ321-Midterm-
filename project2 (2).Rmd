@@ -1,0 +1,97 @@
+---
+title: "Project2"
+author: "Bekha  &  James"
+date: "2025-10-06"
+output: html_document
+---
+
+Question 1: Relationship between vehicle type and ride distance(maybe use facet_wrap for visualization)
+Question 2: Relationship between driver rating and vehicle time of arrival
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+uber_data <- read.csv("/Users/jamescoyle/Desktop/PROJECT 2/Project 2-ISTA 320/archive (4)/ncr_ride_bookings.csv")
+
+head(uber_data)
+summary(uber_data)
+```
+
+
+```{r}
+uber_clean <- uber_data %>% 
+  mutate(
+    Date = ymd(Date),
+    Time = hms(Time),
+    Avg.VTAT = as.numeric(Avg.VTAT),
+    Avg.CTAT = as.numeric(Avg.CTAT),
+    Cancelled.Rides.by.Customer = as.numeric(Cancelled.Rides.by.Customer),
+    Incomplete.Rides = as.numeric(Incomplete.Rides),
+    Booking.Value = as.numeric(Booking.Value),
+    Ride.Distance = as.numeric(Ride.Distance),
+    Driver.Ratings = as.numeric(Driver.Ratings),
+    Customer.Rating = as.numeric(Customer.Rating),
+    USD.Value = round(Booking.Value / 88.23, 2)
+    
+  )
+head(uber_clean)
+view(uber_clean)
+```
+```{r}
+library(tidyverse)
+uber_clean <- uber_data %>% drop_na(Avg.VTAT, Avg.CTAT, Vehicle.Type, Ride.Distance)
+
+
+```
+
+```{r}
+uber_clean <- uber_data[, -c(11, 12, 13, 14,15,16,21)]
+
+view(uber_clean)
+```
+
+```{r}
+uber_clean <- uber_clean %>% 
+  mutate(
+    Driver.Ratings = as.numeric(Driver.Ratings),
+    Avg.VTAT = as.numeric(Avg.VTAT)
+  )
+cor(uber_clean$Driver.Ratings, uber_clean$Avg.VTAT, use = "complete.obs")
+```
+
+```{r}
+set.seed(123)  # for reproducibility
+uber_sample <- uber_clean %>% sample_n(1000)  # take 5,000 random rows
+
+ggplot(uber_sample, aes(x = Avg.VTAT, y = Driver.Ratings)) +
+  geom_jitter(alpha = 0.4, width = 0.3, height = 0.05, color = "black") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Driver Ratings vs. Vehicle Arrival Time (Sample of 1,000)",
+       x = "Average Vehicle Time at Arrival (minutes)",
+       y = "Driver Rating") +
+  theme_minimal()
+
+
+
+```
+
+```{r}
+set.seed(123)  # for reproducibility
+uber_sample <- uber_clean %>% sample_n(1000)  # take 5,000 random rows
+
+ggplot(uber_sample, aes(x = Avg.CTAT, y = Customer.Rating)) +
+  geom_jitter(alpha = 0.4, width = 0.3, height = 0.05, color = "black") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Driver Ratings vs. Vehicle Arrival Time (Sample of 1,000)",
+       x = "Average Vehicle Time at Arrival (minutes)",
+       y = "Driver Rating") +
+  theme_minimal()
+```
+
