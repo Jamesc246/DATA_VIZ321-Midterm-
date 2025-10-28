@@ -89,9 +89,9 @@ uber_sample <- uber_clean %>% sample_n(1000)  # take 5,000 random rows
 ggplot(uber_sample, aes(x = Avg.CTAT, y = Customer.Rating)) +
   geom_jitter(alpha = 0.4, width = 0.3, height = 0.05, color = "black") +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
-  labs(title = "Driver Ratings vs. Vehicle Arrival Time (Sample of 1,000)",
-       x = "Average Vehicle Time at Arrival (minutes)",
-       y = "Driver Rating") +
+  labs(title = "Customer Ratings vs. Customer Arrival Time (Sample of 1,000)",
+       x = "Average Customer Time at Arrival (minutes)",
+       y = "Customer Rating") +
   theme_minimal()
 ```
 
