@@ -3,6 +3,10 @@ title: "Project2"
 author: "Bekha  &  James"
 date: "2025-10-06"
 output: html_document
+
+
+
+Click Commit → write a short message (e.g., “Q1: cleaned data + first plot”) → Commit.
 ---
 
 Question 1: Relationship between vehicle type and ride distance(maybe use facet_wrap for visualization)
