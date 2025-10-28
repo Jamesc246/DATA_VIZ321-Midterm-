@@ -28,20 +28,12 @@ summary(uber_data)
 
 ```{r}
 uber_clean <- uber_data %>% 
+  mutate(across(everything(), ~na_if(., "null"))) %>%
+  mutate(across(everything(), ~na_if(., "NA"))) %>%
+
   mutate(
     Date = ymd(Date),
     Time = hms(Time),
-
-    Avg.VTAT = na_if(Avg.VTAT, "NA"),
-    Avg.CTAT = na_if(Avg.CTAT, "NA"),
-    Cancelled.Rides.by.Customer = na_if(Cancelled.Rides.by.Customer, "NA"),
-    Incomplete.Rides = na_if(Incomplete.Rides, "NA"),
-    Booking.Value = na_if(Booking.Value, "NA"),
-    Ride.Distance = na_if(Ride.Distance, "NA"),
-    Driver.Ratings = na_if(Driver.Ratings, "NA"),
-    Customer.Rating = na_if(Customer.Rating, "NA"),
-
-
 
     Avg.VTAT = as.numeric(Avg.VTAT),
     Avg.CTAT = as.numeric(Avg.CTAT),
@@ -57,12 +49,7 @@ uber_clean <- uber_data %>%
 head(uber_clean)
 view(uber_clean)
 ```
-```{r}
-library(tidyverse)
-uber_clean <- uber_data %>% drop_na(Avg.VTAT, Avg.CTAT, Vehicle.Type, Ride.Distance)
 
-
-```
 
 ```{r}
 uber_clean <- uber_data[, -c(11, 12, 13, 14,15,16,21)]
@@ -71,11 +58,6 @@ view(uber_clean)
 ```
 
 ```{r}
-uber_clean <- uber_clean %>% 
-  mutate(
-    Driver.Ratings = as.numeric(Driver.Ratings),
-    Avg.VTAT = as.numeric(Avg.VTAT)
-  )
 cor(uber_clean$Driver.Ratings, uber_clean$Avg.VTAT, use = "complete.obs")
 ```
 
@@ -86,34 +68,58 @@ cor(uber_clean$Driver.Ratings, uber_clean$Avg.VTAT, use = "complete.obs")
 
 
 
-
-
 ```{r}
-set.seed(123)  # for reproducibility
-uber_sample <- uber_clean %>% sample_n(1000)  # take 5,000 random rows
+set.seed(123)
+
+uber_sample <- uber_clean %>%
+  drop_na(Avg.VTAT, Driver.Ratings) %>%
+  sample_n(min(1000, n()))
 
 ggplot(uber_sample, aes(x = Avg.VTAT, y = Driver.Ratings)) +
-  geom_jitter(alpha = 0.4, width = 0.3, height = 0.05, color = "black") +
-  geom_smooth(method = "lm", se = FALSE, color = "red") +
-  labs(title = "Driver Ratings vs. Vehicle Arrival Time (Sample of 1,000)",
-       x = "Average Vehicle Time at Arrival (minutes)",
-       y = "Driver Rating") +
-  theme_minimal()
-
-
+  geom_jitter(alpha = 0.3, color = "#0072B2", size = 2, width = 0.25, height = 0.05) +  
+  geom_smooth(method = "lm", se = TRUE, color = "#D55E00", linewidth = 1.2, linetype = "solid") + 
+  labs(
+    title = "Driver Ratings vs Vehicle Arrival Time",
+    subtitle = "Sample of 1,000 rides (negative trend suggests longer waits may lower ratings)",
+    x = "Average Vehicle Time at Arrival (minutes)",
+    y = "Driver Rating"
+  ) +
+  theme_minimal(base_size = 13) + 
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, color = "gray30", hjust = 0.5),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "gray85"),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(color = "gray20")
+  )
 
 ```
 
 ```{r}
-set.seed(123)  # for reproducibility
-uber_sample <- uber_clean %>% sample_n(1000)  # take 5,000 random rows
+set.seed(123)
+
+uber_sample <- uber_clean %>%
+  drop_na(Avg.CTAT, Customer.Rating) %>%          
+  sample_n(min(1000, n()))                        
 
 ggplot(uber_sample, aes(x = Avg.CTAT, y = Customer.Rating)) +
-  geom_jitter(alpha = 0.4, width = 0.3, height = 0.05, color = "black") +
-  geom_smooth(method = "lm", se = FALSE, color = "red") +
-  labs(title = "Customer Ratings vs. Customer Arrival Time (Sample of 1,000)",
-       x = "Average Customer Time at Arrival (minutes)",
-       y = "Customer Rating") +
-  theme_minimal()
+  geom_jitter(alpha = 0.3, color = "#0072B2", size = 2, width = 0.25, height = 0.05) + 
+  geom_smooth(method = "lm", se = TRUE, color = "#D55E00", linewidth = 1.2) +         
+  labs(
+    title = "Customer Ratings vs Customer Arrival Time (CTAT)",
+    subtitle = "Sample of 1,000 rides — longer customer wait times slightly reduce satisfaction",
+    x = "Average Customer Time at Arrival (minutes)",
+    y = "Customer Rating"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, color = "gray30", hjust = 0.5),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "gray85"),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(color = "gray20")
+  )
 ```
 
