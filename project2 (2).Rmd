@@ -76,8 +76,6 @@ library(tidyverse)
 
 
 set.seed(123)  # for reproducibility
-# 1. Start with your main dataframe (I'll call it 'df' based on your output)
-#    Filter, create rate_km, and get the hour
 hourly_rates <- uber_clean %>%
   filter(
     Booking.Status == "Completed",
