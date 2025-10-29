@@ -6,8 +6,8 @@ output: html_document
 
 ---
 
-Question 1: Relationship between vehicle type and ride distance(maybe use facet_wrap for visualization)
-Question 2: Relationship between driver rating and vehicle time of arrival
+Question1: How does price efficiency (USD/km) vary by service and time-of-day?
+Question2: Relationship between driver rating and vehicle time of arrival
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
